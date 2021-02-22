@@ -25,6 +25,8 @@ client.on('message', message => {
       message.channel.send('viadinho');
     }else if (message.author.username === 'bhaskara'){
       message.channel.send('putinha');
+    }else if (message.author.username === 'VRAUterWhite'){
+      message.channel.send('para de falar palavrão Waltin!');
     }else {
       message.channel.send('puta');
     }
