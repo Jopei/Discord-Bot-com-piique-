@@ -33,7 +33,7 @@ client.once('ready', () => {
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./img/${daysWeek[date.getDay()]}.png`]
     })
-    client.channels.cache.get(id_channel['roleplay']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+    client.channels.cache.get(id_channel['roleplay']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./img/${daysWeek[date.getDay()]}.png`]
     })
   });
@@ -47,7 +47,7 @@ client.once('ready', () => {
       console.log(result);
       const msg = `MENSAGEM DO DIA @everyone\n\n ${result.message}\n~ ${result.author}`;
       client.channels.cache.get(id_channel['privado']).send(msg)
-      // client.channels.cache.get(id_channel['roleplay']).send(msg)
+      client.channels.cache.get(id_channel['roleplay']).send(msg)
     });
   });
 
@@ -62,10 +62,6 @@ const commands = {
       ]
     });
   },
-  'help': (message) => {
-    const commandsList = Object.entries(commands).map((e) => '-\t!' + e[0]).join('\n');
-    message.channel.send('Lista de comandos do BOT: \n' + commandsList);
-  },
   'aula': (message) => {
     const date = new Date();
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
@@ -74,9 +70,13 @@ const commands = {
   },
   'motivacional': (message) => {
     pensador.getFromMotivacionais().then(result => {
-      const msg = `${text}\n\n ${result.message}\n~ ${result.author}`;
+      const msg = `\n${result.message}\n~ ${result.author}`;
       message.channel.send(msg);
     });
+  },
+  'help': (message) => {
+    const commandsList = Object.entries(commands).map((e) => '-\t!' + e[0]).join('\n');
+    message.channel.send('Lista de comandos do BOT: \n' + commandsList);
   },
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')
