@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const pensador = require('pensador');
 dotenv.config();
 
+console.log(dotenv.config());
 
 const id_channel = {
   'privado': '738149680894050305', // urgod
@@ -64,7 +65,7 @@ const commands = {
   },
   'aula': (message) => {
     const date = new Date();
-    client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+    message.channel.send.send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./img/${daysWeek[date.getDay()]}.png`]
     })
   },
