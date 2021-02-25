@@ -5,8 +5,6 @@ const dotenv = require('dotenv');
 const pensador = require('pensador');
 dotenv.config();
 
-console.log(dotenv.config());
-
 const id_channel = {
   'privado': '738149680894050305', // urgod
   'roleplay': '723342931242778729', // brabos
@@ -32,10 +30,10 @@ client.once('ready', () => {
   rule.minute = 50;
   const jobPuc = schedule.scheduleJob(rule, function(date){
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
-      files: [`./img/${daysWeek[date.getDay()]}.png`]
+      files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
     client.channels.cache.get(id_channel['roleplay']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
-      files: [`./img/${daysWeek[date.getDay()]}.png`]
+      files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   });
 
@@ -59,14 +57,14 @@ const commands = {
   'calendario': (message) => {
     message.channel.send('Aulas da semana: \n', {
       files: [
-        './img/calendario.png'
+        './src/img/calendario.png'
       ]
     });
   },
   'aula': (message) => {
     const date = new Date();
     message.channel.send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
-      files: [`./img/${daysWeek[date.getDay()]}.png`]
+      files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   },
   'motivacional': (message) => {
