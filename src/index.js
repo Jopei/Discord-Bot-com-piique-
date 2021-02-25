@@ -1,39 +1,100 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const schedule = require('node-schedule');
 const dotenv = require('dotenv');
+const pensador = require('pensador');
+
 dotenv.config();
 
+const id_channel = {
+  'privado': '738149680894050305', // urgod
+  'roleplay': '723342931242778729', // brabos
+}
+
+const daysWeek = {
+  0: 'domingo',
+  1: 'segunda',
+  2: 'terca',
+  3: 'quarta',
+  4: 'quinta',
+  5: 'sexta',
+  6: 'sabado',
+}
+
 client.once('ready', () => {
-	console.log('Ready!');
+  console.log('Ready!');  
+  
+  // schedule PUC
+  const rule = new schedule.RecurrenceRule();
+  rule.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
+  rule.hour = 18;
+  rule.minute = 50;
+  const jobPuc = schedule.scheduleJob(rule, function(date){
+    client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+      files: [`./img/${daysWeek[date.getDay()]}.png`]
+    })
+    client.channels.cache.get(id_channel['roleplay']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+      files: [`./img/${daysWeek[date.getDay()]}.png`]
+    })
+  });
+
+  // schedule Motivacional
+  rule.dayOfWeek = [new schedule.Range(0, 6)]; // todos os dias da semana
+  rule.hour = 09;
+  rule.minute = 00;
+  const jobMotivacional = schedule.scheduleJob(rule, function(date){
+    pensador.getFromMotivacionais().then(result => {
+      console.log(result);
+      const msg = `MENSAGEM DO DIA @everyone\n\n ${result.message}\n~ ${result.author}`;
+      client.channels.cache.get(id_channel['privado']).send(msg)
+      // client.channels.cache.get(id_channel['roleplay']).send(msg)
+    });
+  });
+
 });
+
+// commands to bot
+const commands = {
+  'calendario': (message) => {
+    message.channel.send('Aulas da semana: \n', {
+      files: [
+        './img/calendario.png'
+      ]
+    });
+  },
+  'help': (message) => {
+    const commandsList = Object.entries(commands).map((e) => '-\t!' + e[0]).join('\n');
+    message.channel.send('Lista de comandos do BOT: \n' + commandsList);
+  },
+  'aula': (message) => {
+    const date = new Date();
+    client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+      files: [`./img/${daysWeek[date.getDay()]}.png`]
+    })
+  },
+  'motivacional': (message) => {
+    pensador.getFromMotivacionais().then(result => {
+      const msg = `${text}\n\n ${result.message}\n~ ${result.author}`;
+      message.channel.send(msg);
+    });
+  },
+  // 'teste': (message) => {
+  //   message.channel.send('Mensagem de teste')
+  // }
+};
 
 client.on('message', message => {
-  if (message.content.toUpperCase().indexOf('PEDRO') >= 0) {
-    message.channel.send('Sem tempo irmão!');
+  console.log(message.content)
+  // if to verify and call commands
+  if(message.content[0] === '!' && commands[message.content.substr(1)]){
+    // message.react('🤖'); // react every time the bot is called
+    commands[message.content.substr(1)](message);
   }
 
-  if (message.content.toUpperCase().indexOf('<@!301116055911399435>') >= 0) {
-    message.channel.send('Chama no zap: (31) 99568-4012');
+  // react to Jopeina Bot messages
+  if(message.author.username === 'Jopeina Bot'){
+    message.react('🤖');
   }
-
-  if (message.content.toUpperCase().indexOf('CARALHO') >= 0) {
-    if(message.author.username === 'Batatinha'){
-      message.channel.send('linda');
-    }else if (message.author.username === 'maicon_gomes'){
-      message.channel.send('corninho');
-    }else if (message.author.username === 'Jopeina'){
-      message.channel.send('viadinho');
-    }else if (message.author.username === 'bhaskara'){
-      message.channel.send('putinha');
-    }else if (message.author.username === 'VRAUterWhite'){
-      message.channel.send('para de falar palavrão Waltin!');
-    }else {
-      message.channel.send('puta');
-    }
-  }
-
-	console.log(message.author.username + ': ' + message.content);
 });
 
-// console.log(process.env);
 client.login(process.env.TOKEN);
