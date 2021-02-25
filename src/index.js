@@ -3,8 +3,8 @@ const client = new Discord.Client();
 const schedule = require('node-schedule');
 const dotenv = require('dotenv');
 const pensador = require('pensador');
-
 dotenv.config();
+
 
 const id_channel = {
   'privado': '738149680894050305', // urgod
