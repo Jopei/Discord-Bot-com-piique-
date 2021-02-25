@@ -65,7 +65,7 @@ const commands = {
   },
   'aula': (message) => {
     const date = new Date();
-    message.channel.send.send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+    message.channel.send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./img/${daysWeek[date.getDay()]}.png`]
     })
   },
