@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const pensador = require('pensador');
 dotenv.config();
 
+const fuso = process.env.FUSO ?? 0;
+
 const id_channel = {
   'privado': '738149680894050305', // urgod
   'roleplay': '723342931242778729', // brabos
@@ -26,8 +28,9 @@ client.once('ready', () => {
   // schedule PUC
   const rule = new schedule.RecurrenceRule();
   rule.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
-  rule.hour = 18;
+  rule.hour = 18 - fuso;
   rule.minute = 50;
+  console.log(rule.hour)
   const jobPuc = schedule.scheduleJob(rule, function(date){
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
@@ -39,7 +42,7 @@ client.once('ready', () => {
 
   // schedule Motivacional
   rule.dayOfWeek = [new schedule.Range(0, 6)]; // todos os dias da semana
-  rule.hour = 09;
+  rule.hour = 09 - fuso;
   rule.minute = 00;
   const jobMotivacional = schedule.scheduleJob(rule, function(date){
     pensador.getFromMotivacionais().then(result => {
@@ -95,7 +98,7 @@ client.on('message', message => {
     message.react('🤖');
   }
   if(message.content === '!time') {
-    const date = new Date()
+    const date = new Date(new Date() - 10800000)
     message.channel.send(date + '');
   }
 });
