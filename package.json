@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "node-schedule": "^2.0.0",
+    "pensador": "^1.0.4"
   },
   "engines": {
     "node": "14.*",
