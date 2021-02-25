@@ -94,6 +94,10 @@ client.on('message', message => {
   if(message.author.username === 'Jopeina Bot'){
     message.react('🤖');
   }
+  if(message.content === '!time') {
+    const date = new Date()
+    message.channel.send(date + '');
+  }
 });
 
 client.login(process.env.TOKEN);
