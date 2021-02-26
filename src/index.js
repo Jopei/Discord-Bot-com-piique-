@@ -9,7 +9,7 @@ const fuso = process.env.FUSO ?? 0;
 
 const id_channel = {
   'privado': '738149680894050305', // urgod
-  'roleplay': '723342931242778729', // brabos
+  'call-do-bot': '723342931242778729', // brabos
 }
 
 const daysWeek = {
@@ -22,6 +22,16 @@ const daysWeek = {
   6: 'sabado',
 }
 
+const daysPhrase = {
+  0: 'Vai rezar crente!!',
+  1: 'Bom ? \nInicio de semana ',
+  2: 'Bom ? \nJá é terça-feira em quase no meio da semana',
+  3: 'Continua bom ?kk \nPra hoje, meio da semana,temos só uma aulinha',
+  4: 'Urfa é quase sexta!!!',
+  5: 'Sextou amor!!!',
+  6: 'Mano é sabado kkkkkk me deixa em paz, folga do bot, até segunda!!',
+}
+
 client.once('ready', () => {
   console.log('Ready!');  
   
@@ -30,12 +40,11 @@ client.once('ready', () => {
   rule.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
   rule.hour = 18 - fuso;
   rule.minute = 50;
-  console.log(rule.hour)
   const jobPuc = schedule.scheduleJob(rule, function(date){
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
-    client.channels.cache.get(id_channel['roleplay']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+    client.channels.cache.get(id_channel['call-do-bot']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   });
@@ -49,7 +58,7 @@ client.once('ready', () => {
       console.log(result);
       const msg = `MENSAGEM DO DIA @everyone\n\n ${result.message}\n~ ${result.author}`;
       client.channels.cache.get(id_channel['privado']).send(msg)
-      client.channels.cache.get(id_channel['roleplay']).send(msg)
+      client.channels.cache.get(id_channel['call-do-bot']).send(msg)
     });
   });
 
@@ -66,7 +75,7 @@ const commands = {
   },
   'aula': (message) => {
     const date = new Date();
-    message.channel.send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+    message.channel.send(`${daysPhrase[date.getDay()]} \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   },
