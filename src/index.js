@@ -10,6 +10,7 @@ const fuso = process.env.FUSO ?? 0;
 const id_channel = {
   'privado': '738149680894050305', // urgod
   'call-do-bot': '723342931242778729', // brabos
+  'roleplay' : '769626230650568725',//brabos
 }
 
 const daysWeek = {
@@ -44,7 +45,7 @@ client.once('ready', () => {
     client.channels.cache.get(id_channel['privado']).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
-    client.channels.cache.get(id_channel['call-do-bot']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+    client.channels.cache.get(id_channel['roleplay']).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   });
@@ -58,7 +59,7 @@ client.once('ready', () => {
       console.log(result);
       const msg = `MENSAGEM DO DIA @everyone\n\n ${result.message}\n~ ${result.author}`;
       client.channels.cache.get(id_channel['privado']).send(msg)
-      client.channels.cache.get(id_channel['call-do-bot']).send(msg)
+      client.channels.cache.get(id_channel['roleplay']).send(msg)
     });
   });
 
