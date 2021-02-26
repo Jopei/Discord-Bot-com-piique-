@@ -23,7 +23,7 @@ const daysWeek = {
 }
 
 const daysPhrase = {
-  0: 'Vai rezar crente!!!',
+  0: 'Vai rezar crente!!',
   1: 'Bom ? \nInicio de semana ',
   2: 'Bom ? \nJá é terça-feira em quase no meio da semana',
   3: 'Continua bom ?kk \nPra hoje, meio da semana,temos só uma aulinha',
@@ -75,8 +75,8 @@ const commands = {
   },
   'aula': (message) => {
     const date = new Date();
-    message.channel.send(`${daysPhrase[0]} \nHorário de ${daysWeek[0]}: \n`, {
-      files: [`./src/img/${daysWeek[0]}.png`]
+    message.channel.send(`${daysPhrase[date.getDay()]} \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+      files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
   },
   'motivacional': (message) => {
