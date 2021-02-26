@@ -74,7 +74,7 @@ const commands = {
     });
   },
   'aula': (message) => {
-    const date = new Date();
+    const date = new Date(new Date() - (-fuso *3600000));
     message.channel.send(`${daysPhrase[date.getDay()]} \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`]
     })
@@ -106,8 +106,9 @@ client.on('message', message => {
   if(message.author.username === 'Jopeina Bot'){
     message.react('🤖');
   }
+  
   if(message.content === '!time') {
-    const date = new Date(new Date() - 10800000)
+    const date = new Date(new Date() - (-fuso * 3600000))
     message.channel.send(date + '');
   }
 });
