@@ -14,6 +14,10 @@
         "no-unused-vars": "off",
         "comma-dangle": "error",
         "no-console": "warn",
-        "max-len": "off"
+        "max-len": "off",
+        "import/extensions": "off",
+        "prefer-destructuring": "off",
+        "arrow-body-style": "off",
+        "linebreak-style": "off"
     }
 }

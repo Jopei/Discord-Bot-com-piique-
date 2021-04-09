@@ -1,9 +1,9 @@
-const Discord = require('discord.js');
+import Discord from 'discord.js';
+import schedule from 'node-schedule';
+import dotenv from 'dotenv';
+import motivacionalApi from './motivacional/motivacionalApi.js';
 
 const client = new Discord.Client();
-const schedule = require('node-schedule');
-const dotenv = require('dotenv');
-const pensador = require('pensador');
 
 dotenv.config();
 
@@ -61,8 +61,9 @@ client.once('ready', () => {
   ruleMotivacional.minute = 0;
   const jobMotivacional = schedule.scheduleJob(ruleMotivacional, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
-    pensador.getFromMotivacionais().then((result) => {
-      const msg = `MENSAGEM DO DIA \n\n ${result.message}\n~ ${result.author}`;
+    motivacionalApi('pt').then((resultado) => {
+      console.log(resultado);
+      const msg = `\t${resultado.originalText}\n\t${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.privado).send(msg);
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
@@ -85,8 +86,9 @@ const commands = {
     });
   },
   motivacional: (message) => {
-    pensador.getFromMotivacionais().then((result) => {
-      const msg = `\n${result.message}\n~ ${result.author}`;
+    motivacionalApi('pt').then((resultado) => {
+      console.log(resultado);
+      const msg = `- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       message.channel.send(msg);
     });
   },
