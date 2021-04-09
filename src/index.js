@@ -9,7 +9,7 @@ dotenv.config();
 
 const fuso = process.env.FUSO ?? 0;
 
-const idChannel = {
+const idChannels = {
   privado: '738149680894050305', // urgod
   roleplay: '723342931242778729', // brabos
   'call-do-bot': '812503441049911316', // brabos
@@ -40,30 +40,31 @@ client.once('ready', () => {
   console.log('Ready!');
 
   // schedule PUC
-  const rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
-  rule.hour = 18 - fuso;
-  rule.minute = 50;
-  const jobPuc = schedule.scheduleJob(rule, () => {
+  const rulePuc = new schedule.RecurrenceRule();
+  rulePuc.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
+  rulePuc.hour = 18 - fuso;
+  rulePuc.minute = 20;
+  const jobPuc = schedule.scheduleJob(rulePuc, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
-    client.channels.cache.get(idChannel.privado).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
-      files: [`./src/img/${daysWeek[date.getDay()]}.png`],
-    });
-    client.channels.cache.get(idChannel.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+    // client.channels.cache.get(idChannels.privado).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+    //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
+    // });
+    client.channels.cache.get(idChannels.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`],
     });
   });
 
   // schedule Motivacional
-  rule.dayOfWeek = [new schedule.Range(0, 6)]; // todos os dias da semana
-  rule.hour = 9 - fuso;
-  rule.minute = 0;
-  const jobMotivacional = schedule.scheduleJob(rule, () => {
+  const ruleMotivacional = new schedule.RecurrenceRule();
+  ruleMotivacional.dayOfWeek = [new schedule.Range(0, 6)]; // todos os dias da semana
+  ruleMotivacional.hour = 9 - fuso;
+  ruleMotivacional.minute = 0;
+  const jobMotivacional = schedule.scheduleJob(ruleMotivacional, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
     pensador.getFromMotivacionais().then((result) => {
-      const msg = `MENSAGEM DO DIA @everyone\n\n ${result.message}\n~ ${result.author}`;
-      client.channels.cache.get(idChannel.privado).send(msg);
-      client.channels.cache.get(idChannel.roleplay).send(msg);
+      const msg = `MENSAGEM DO DIA \n\n ${result.message}\n~ ${result.author}`;
+      client.channels.cache.get(idChannels.privado).send(msg);
+      client.channels.cache.get(idChannels.roleplay).send(msg);
     });
   });
 });

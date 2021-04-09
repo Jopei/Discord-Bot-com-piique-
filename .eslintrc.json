@@ -13,6 +13,7 @@
     "rules": {
         "no-unused-vars": "off",
         "comma-dangle": "error",
-        "no-console": "warn"
+        "no-console": "warn",
+        "max-len": "off"
     }
 }
