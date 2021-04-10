@@ -63,7 +63,7 @@ client.once('ready', () => {
     const date = new Date(new Date() - (-fuso * 3600000));
     motivacionalApi('pt').then((resultado) => {
       console.log(resultado);
-      const msg = `\t${resultado.originalText}\n\t${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
+      const msg = `@everyone Mensagem do dia:\n- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.privado).send(msg);
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
