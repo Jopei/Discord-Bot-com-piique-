@@ -121,6 +121,7 @@ const commands = {
   tasks: (message) => {
     try {
       discordInfo.forEach((discord) => {
+        // console.log(message.author.id);
         if (discord.id === message.author.id) {
           taskService.getTasks({ matricula: discord.matricula }).then((response) => {
             const msg = response.data.map((row) => {
@@ -144,7 +145,10 @@ const commands = {
       // console.log(error);
       return;
     }
-    message.channel.send('Nenhum usuário cadastrado para o bot!');
+    // message.channel.send('Nenhum usuário cadastrado para o bot!');
+  },
+  aleatorio: (message) => {
+    message.channel.send('Comando Aleatorio');
   },
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')
