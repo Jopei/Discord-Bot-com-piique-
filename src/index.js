@@ -147,9 +147,6 @@ const commands = {
     }
     // message.channel.send('Nenhum usuário cadastrado para o bot!');
   },
-  aleatorio: (message) => {
-    message.channel.send('Comando Aleatorio');
-  },
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')
   // }
