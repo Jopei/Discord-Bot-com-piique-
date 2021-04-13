@@ -2,12 +2,24 @@ import Discord from 'discord.js';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
 import motivacionalApi from './motivacional/motivacionalApi.js';
+import taskService from './services/TaskService.js';
 
 const client = new Discord.Client();
 
 dotenv.config();
 
 const fuso = process.env.FUSO ?? 0;
+
+const discordInfo = [
+  { user: 'piique', id: '301116055911399435', matricula: '704421' },
+  { user: 'namaria', id: '690341408200327229', matricula: '696829' },
+  { user: 'matheus', id: '487601326360887296', matricula: '704843' },
+  { user: 'jopei', id: '658879812324294676', matricula: '701455' },
+  // { user: 'maidog', id: "694329529195298956", matricula: "000000" }, // falta colocar matricula correta
+  // { user: 'paulindo', id: "286560019741278209", matricula: "000000" }, // falta colocar matricula correta
+  { user: 'annacorna', id: '547582806876749859', matricula: '724062' },
+  { user: 'waltinhocorno', id: '226761310501732352', matricula: '666666' },
+];
 
 const idChannels = {
   privado: '738149680894050305', // urgod
@@ -33,6 +45,16 @@ const daysPhrase = {
   4: 'Urfa é quase sexta!!!',
   5: 'Sextou amor!!!',
   6: 'Mano é sabado kkkkkk me deixa em paz, folga do bot, até segunda!!',
+};
+
+const getFormattedDate = (data) => {
+  const dia = data.getDate().toString();
+  const diaF = (dia.length === 1) ? `0${dia}` : dia;
+  const mes = (data.getMonth() + 1).toString(); // +1 pois no getMonth Janeiro começa com zero.
+  const mesF = (mes.length === 1) ? `0${mes}` : mes;
+  const anoF = data.getFullYear();
+  // return `${diaF}/${mesF}/${anoF}`;
+  return `${diaF}/${mesF}`;
 };
 
 // run one time, when the server starts
@@ -95,6 +117,41 @@ const commands = {
   help: (message) => {
     const commandsList = Object.entries(commands).map((e) => `-\t!${e[0]}`).join('\n');
     message.channel.send(`Lista de comandos do BOT: \n${commandsList}`);
+  },
+  tasks: (message) => {
+    // message.author.id
+    // const matricula = discordInfo.filter((e) => {e.id === });
+    console.log('Chamou Tasks');
+    try {
+      discordInfo.forEach((discord) => {
+        // console.log(discord.id ==);
+        if (discord.id === message.author.id) {
+          console.log('entrou aqui');
+          taskService.getTasks({ matricula: discord.matricula }).then((response) => {
+            console.log(response.data);
+            const msg = response.data.map((row) => {
+              const date = getFormattedDate(new Date(row.date));
+              return `${date} - ${row.materia}`;
+            }).join('\n');
+
+            if (msg) {
+              // console.log(msg);
+              message.channel.send(`Próximos 15 dias: \n${msg}`);
+            } else {
+              // console.log('nenhuma tarefa cadastrada!');
+              message.channel.send('Nenhuma tarefa cadastrada!');
+            }
+          }).catch((error) => {
+            console.log('Deu erro caraio');
+            console.log(error);
+          });
+        }
+        return;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // message.channel.send('Nenhum usuário cadastrado para o bot!');
   },
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')

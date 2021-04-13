@@ -18,6 +18,7 @@
         "import/extensions": "off",
         "prefer-destructuring": "off",
         "arrow-body-style": "off",
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "no-useless-return": "off"
     }
 }
