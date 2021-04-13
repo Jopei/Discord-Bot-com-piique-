@@ -136,7 +136,7 @@ const commands = {
 
             if (msg) {
               // console.log(msg);
-              message.channel.send(`Próximos 15 dias: \n${msg}`);
+              message.channel.send(`TAREFAS\nPróximos 15 dias: \n\n${msg}\n\nMais info: https://atividadespuc.pedrovilaca.com/tarefas`);
             } else {
               // console.log('nenhuma tarefa cadastrada!');
               message.channel.send('Nenhuma tarefa cadastrada!');
