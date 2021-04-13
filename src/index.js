@@ -15,8 +15,8 @@ const discordInfo = [
   { user: 'namaria', id: '690341408200327229', matricula: '696829' },
   { user: 'matheus', id: '487601326360887296', matricula: '704843' },
   { user: 'jopei', id: '658879812324294676', matricula: '701455' },
-  // { user: 'maidog', id: "694329529195298956", matricula: "000000" }, // falta colocar matricula correta
-  // { user: 'paulindo', id: "286560019741278209", matricula: "000000" }, // falta colocar matricula correta
+  { user: 'maidog', id: '694329529195298956', matricula: '695785' },
+  { user: 'paulindo', id: '286560019741278209', matricula: '690575' },
   { user: 'annacorna', id: '547582806876749859', matricula: '724062' },
   { user: 'waltinhocorno', id: '226761310501732352', matricula: '666666' },
 ];
@@ -84,7 +84,7 @@ client.once('ready', () => {
   const jobMotivacional = schedule.scheduleJob(ruleMotivacional, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
     motivacionalApi('pt').then((resultado) => {
-      console.log(resultado);
+      // console.log(resultado);
       const msg = `@everyone Mensagem do dia:\n- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.privado).send(msg);
       client.channels.cache.get(idChannels.roleplay).send(msg);
@@ -109,7 +109,7 @@ const commands = {
   },
   motivacional: (message) => {
     motivacionalApi('pt').then((resultado) => {
-      console.log(resultado);
+      // console.log(resultado);
       const msg = `- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       message.channel.send(msg);
     });
@@ -119,39 +119,32 @@ const commands = {
     message.channel.send(`Lista de comandos do BOT: \n${commandsList}`);
   },
   tasks: (message) => {
-    // message.author.id
-    // const matricula = discordInfo.filter((e) => {e.id === });
-    console.log('Chamou Tasks');
     try {
       discordInfo.forEach((discord) => {
-        // console.log(discord.id ==);
         if (discord.id === message.author.id) {
-          console.log('entrou aqui');
           taskService.getTasks({ matricula: discord.matricula }).then((response) => {
-            console.log(response.data);
             const msg = response.data.map((row) => {
               const date = getFormattedDate(new Date(row.date));
               return `${date} - ${row.materia}`;
             }).join('\n');
 
             if (msg) {
-              // console.log(msg);
               message.channel.send(`TAREFAS\nPróximos 15 dias: \n\n${msg}\n\nMais info: https://atividadespuc.pedrovilaca.com/tarefas`);
             } else {
-              // console.log('nenhuma tarefa cadastrada!');
               message.channel.send('Nenhuma tarefa cadastrada!');
             }
           }).catch((error) => {
-            console.log('Deu erro caraio');
-            console.log(error);
+            // console.log('Deu erro caraio');
+            // console.warn(error);
           });
         }
         return;
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      return;
     }
-    // message.channel.send('Nenhum usuário cadastrado para o bot!');
+    message.channel.send('Nenhum usuário cadastrado para o bot!');
   },
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')
