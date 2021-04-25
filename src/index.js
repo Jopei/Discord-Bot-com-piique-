@@ -86,7 +86,7 @@ client.once('ready', () => {
     motivacionalApi('pt').then((resultado) => {
       // console.log(resultado);
       const msg = `@everyone Mensagem do dia:\n- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
-      client.channels.cache.get(idChannels.privado).send(msg);
+      // client.channels.cache.get(idChannels.privado).send(msg);
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
   });
