@@ -25,6 +25,7 @@ const idChannels = {
   privado: '738149680894050305', // urgod
   roleplay: '723342931242778729', // brabos
   'call-do-bot': '812503441049911316', // brabos
+  noPuedoMotivacional: '836599706494173244', // no puedo
 };
 
 const daysWeek = {
@@ -83,11 +84,15 @@ client.once('ready', () => {
   ruleMotivacional.minute = 0;
   const jobMotivacional = schedule.scheduleJob(ruleMotivacional, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
-    motivacionalApi('pt').then((resultado) => {
-      // console.log(resultado);
-      const msg = `@everyone Mensagem do dia:\n- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
-      // client.channels.cache.get(idChannels.privado).send(msg);
+    motivacionalApi('pt').then((response) => {
+      // console.log(response);
+      const msg = `@everyone Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.roleplay).send(msg);
+    });
+    motivacionalApi('pt').then((response) => {
+      // console.log(response);
+      const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
+      client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
     });
   });
 });
