@@ -89,11 +89,11 @@ client.once('ready', () => {
       const msg = `@everyone Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
-    motivacionalApi('pt').then((response) => {
-      // console.log(response);
-      const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
-      client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
-    });
+    // motivacionalApi('pt').then((response) => {
+    //   // console.log(response);
+    //   const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
+    //   client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
+    // });
   });
 });
 
