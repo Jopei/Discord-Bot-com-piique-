@@ -72,9 +72,10 @@ client.once('ready', () => {
     // client.channels.cache.get(idChannels.privado).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
     //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
     // });
-    client.channels.cache.get(idChannels.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
-      files: [`./src/img/${daysWeek[date.getDay()]}.png`],
-    });
+
+    // client.channels.cache.get(idChannels.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+    //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
+    // });
   });
 
   // schedule Motivacional
@@ -89,11 +90,11 @@ client.once('ready', () => {
       const msg = `@everyone Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
-    // motivacionalApi('pt').then((response) => {
-    //   // console.log(response);
-    //   const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
-    //   client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
-    // });
+    motivacionalApi('pt').then((response) => {
+      // console.log(response);
+      const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
+      client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
+    });
   });
 });
 
