@@ -10,6 +10,8 @@ dotenv.config();
 
 const fuso = process.env.FUSO ?? 0;
 
+const onVocation = false;
+
 const discordInfo = [
   { user: 'piique', id: '301116055911399435', matricula: '704421' },
   { user: 'namaria', id: '690341408200327229', matricula: '696829' },
@@ -68,14 +70,16 @@ client.once('ready', () => {
   rulePuc.hour = 18 - fuso;
   rulePuc.minute = 20;
   const jobPuc = schedule.scheduleJob(rulePuc, () => {
-    const date = new Date(new Date() - (-fuso * 3600000));
-    // client.channels.cache.get(idChannels.privado).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
-    //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
-    // });
+    if (!onVocation) {
+      const date = new Date(new Date() - (-fuso * 3600000));
+      // client.channels.cache.get(idChannels.privado).send(`Horário de ${daysWeek[date.getDay()]}: \n`, {
+      //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
+      // });
 
-    // client.channels.cache.get(idChannels.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
-    //   files: [`./src/img/${daysWeek[date.getDay()]}.png`],
-    // });
+      client.channels.cache.get(idChannels.roleplay).send(`@everyone \nHorário de ${daysWeek[date.getDay()]}: \n`, {
+        files: [`./src/img/${daysWeek[date.getDay()]}.png`],
+      });
+    }
   });
 
   // schedule Motivacional
