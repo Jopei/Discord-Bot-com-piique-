@@ -42,8 +42,8 @@ const daysWeek = {
 
 const daysPhrase = {
   0: 'Vai rezar crente!!',
-  1: 'Bom ? \nInicio de semana ',
-  2: 'Bom ? \nJá é terça-feira em quase no meio da semana',
+  1: 'Bom? \nInicio de semana ',
+  2: 'Bom? \nJá é terça-feira! Descanso? Nada disso, vai estutar a optativa.',
   3: 'Continua bom ?kk \nPra hoje, meio da semana,temos só uma aulinha',
   4: 'Urfa é quase sexta!!!',
   5: 'Sextou amor!!!',
