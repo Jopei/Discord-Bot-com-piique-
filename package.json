@@ -8,15 +8,20 @@
     "serve": "node ./src/index.js",
     "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "./node_modules/.bin/eslint --fix"
+    "eslint": "./node_modules/.bin/eslint --fix",
+    "dev": "nodemon ./src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "discordjs/opus",
     "axios": "^0.21.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "node-schedule": "^2.0.0"
+    "ffmpeg-static": "^4.4.0",
+    "googleapis": "^87.0.0",
+    "node-schedule": "^2.0.0",
+    "ytdl-core": "^4.9.1"
   },
   "engines": {
     "node": "14.*",
@@ -25,6 +30,7 @@
   "devDependencies": {
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.12"
   }
 }

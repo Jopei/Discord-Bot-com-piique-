@@ -1,16 +1,49 @@
+// discord invite link: https://discord.com/oauth2/authorize?client_id=812482585162416128&scope=bot&permissions=2147483647
+
 import Discord from 'discord.js';
 import schedule from 'node-schedule';
 import dotenv from 'dotenv';
+import ytdl from 'ytdl-core';
+import google from 'googleapis';
+import fs from 'fs';
 import motivacionalApi from './motivacional/motivacionalApi.js';
 import taskService from './services/TaskService.js';
 
+dotenv.config();
+
 const client = new Discord.Client();
 
-dotenv.config();
+const youtube = new google.youtube_v3.Youtube({
+  version: 'v3',
+  auth: process.env.YOUTUBE_API_KEY,
+});
 
 const fuso = process.env.FUSO ?? 0;
 
 const onVocation = false;
+
+const prefix = '!';
+
+// connection: null,
+// dispatcher: null,
+// voiceChannel: null,
+// queue: [],
+// playing: false,
+
+const servers = [];
+// const servers = {
+//   server: {
+//     connection: null,
+//     dispatcher: null,
+//     voiceChannel: null,
+//     queue: [],
+//     playing: false,
+//   },
+// };
+
+const ytdlOptions = {
+  filter: 'audioonly',
+};
 
 const discordInfo = [
   { user: 'piique', id: '301116055911399435', matricula: '704421' },
@@ -60,9 +93,88 @@ const getFormattedDate = (data) => {
   return `${diaF}/${mesF}`;
 };
 
+const playMusics = (message) => {
+  if (servers[message.guild.id].playing) {
+    return;
+  }
+
+  const playing = servers[message.guild.id].queue[0];
+  // console.log(`Tocando isso aqui: ${playing}`);
+  servers[message.guild.id].playing = true;
+  servers[message.guild.id].dispatcher = servers[message.guild.id].connection.play(ytdl(playing, ytdlOptions));
+
+  servers[message.guild.id].dispatcher.on('finish', () => {
+    servers[message.guild.id].queue.shift();
+    servers[message.guild.id].playing = false;
+    if (servers[message.guild.id].queue.length > 0) {
+      playMusics(message);
+    } else {
+      servers[message.guild.id].dispatcher = null;
+      servers[message.guild.id].connection.disconnect();
+    }
+  });
+};
+
+const saveServer = (id) => {
+  const file = './src/servers.json';
+  fs.readFile(file, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Ocorreu um erro ao salvar informações dos servidores');
+      console.error(err);
+      return;
+    }
+
+    const json = JSON.parse(data);
+    json.servers.push(id);
+    fs.writeFile(file, JSON.stringify(json), (err2) => {
+      if (err2) {
+        console.error(err2);
+        return;
+      }
+    });
+  });
+};
+
+const loadServers = () => {
+  const file = './src/servers.json';
+  fs.readFile(file, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Ocorreu um erro ao carregar informações dos servidores');
+      console.error(err);
+      return;
+    }
+
+    const json = JSON.parse(data);
+
+    json.servers.forEach((id) => {
+      servers[id] = {
+        connection: null,
+        dispatcher: null,
+        voiceChannel: null,
+        queue: [],
+        playing: false,
+      };
+    });
+  });
+};
+
+client.on('guildCreate', (guild) => {
+  servers[guild.id] = {
+    connection: null,
+    dispatcher: null,
+    voiceChannel: null,
+    queue: [],
+    playing: false,
+  };
+
+  saveServer(guild.id);
+});
+
 // run one time, when the server starts
 client.once('ready', () => {
   console.log('Ready!');
+
+  loadServers();
 
   // schedule PUC
   const rulePuc = new schedule.RecurrenceRule();
@@ -90,12 +202,10 @@ client.once('ready', () => {
   const jobMotivacional = schedule.scheduleJob(ruleMotivacional, () => {
     const date = new Date(new Date() - (-fuso * 3600000));
     motivacionalApi('pt').then((response) => {
-      // console.log(response);
       const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.roleplay).send(msg);
     });
     motivacionalApi('pt').then((response) => {
-      // console.log(response);
       const msg = `Mensagem do dia:\n- ${response.originalText}\n- ${response.translatedText} \n~ ${response.author ?? 'desconhecido'}`;
       client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
     });
@@ -111,27 +221,29 @@ const commands = {
       ],
     });
   },
+
   aula: (message) => {
     const date = new Date(new Date() - (-fuso * 3600000));
     message.channel.send(`${daysPhrase[date.getDay()]} \nHorário de ${daysWeek[date.getDay()]}: \n`, {
       files: [`./src/img/${daysWeek[date.getDay()]}.png`],
     });
   },
+
   motivacional: (message) => {
     motivacionalApi('pt').then((resultado) => {
-      // console.log(resultado);
       const msg = `- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
       message.channel.send(msg);
     });
   },
+
   help: (message) => {
     const commandsList = Object.entries(commands).map((e) => `-\t!${e[0]}`).join('\n');
     message.channel.send(`Lista de comandos do BOT: \n${commandsList}`);
   },
+
   tasks: (message) => {
     try {
       discordInfo.forEach((discord) => {
-        // console.log(message.author.id);
         if (discord.id === message.author.id) {
           taskService.getTasks({ matricula: discord.matricula }).then((response) => {
             const msg = response.data.map((row) => {
@@ -145,29 +257,109 @@ const commands = {
               message.channel.send('Nenhuma tarefa cadastrada!');
             }
           }).catch((error) => {
-            // console.log('Deu erro caraio');
             // console.warn(error);
           });
         }
         return;
       });
     } catch (error) {
-      // console.log(error);
+      console.error(error);
       return;
     }
     // message.channel.send('Nenhum usuário cadastrado para o bot!');
   },
+
+  play: async (message) => {
+    servers[message.guild.id].voiceChannel = message.member.voice.channel;
+    if (!servers[message.guild.id].voiceChannel) {
+      return message.channel.send('Você precisa estar em um canal de voz para usar esse comando!');
+    }
+
+    if (!message.content.match(/(?<=(!\w+\s)).+/g)) {
+      return message.channel.send('Não foi possível identificar a musica ou o link do vídeo!');
+    }
+
+    if (servers[message.guild.id].connection === null) {
+      try {
+        servers[message.guild.id].connection = await servers[message.guild.id].voiceChannel.join();
+      } catch (error) {
+        console.error(error);
+        return message.channel.send('Erro! Não foi possível tocar a música!');
+      }
+    }
+
+    const linkOrMusic = message.content.match(/(?<=(!\w+\s)).+/g)[0];
+
+    if (ytdl.validateURL(linkOrMusic)) {
+      // link
+      servers[message.guild.id].queue.push(linkOrMusic);
+      playMusics(message);
+    } else {
+      // youtube search and play the first result
+      youtube.search.list({
+        q: linkOrMusic,
+        part: 'snippet',
+        maxResults: 1,
+        fields: 'items(id,snippet(title,description,thumbnails(default)))',
+        type: 'video',
+      }).then((response) => {
+        const videoId = response.data.items[0].id.videoId;
+        servers[message.guild.id].queue.push(`https://youtu.be/${videoId}`);
+        playMusics(message);
+        // console.log(JSON.stringify(servers[message.guild.id].queue));
+        // console.log(`Adicionado: https://youtu.be/${videoId}`);
+      }).catch((err) => {
+        message.channel.send('Não foi possível identificar a musica ou o link do vídeo!');
+        console.error(err);
+      });
+    }
+
+    return;
+  },
+
+  stop: (message) => {
+    if (!servers[message.guild.id].dispatcher) {
+      return message.channel.send('Não há nenhuma música tocando!');
+    }
+    servers[message.guild.id].dispatcher.pause();
+    // message.channel.send('Música pausada!');
+  },
+
+  start: (message) => {
+    if (!servers[message.guild.id].dispatcher) {
+      return message.channel.send('Não há nenhuma música tocando!');
+    }
+    servers[message.guild.id].dispatcher.resume();
+    // message.channel.send('Música iniciada!');
+  },
+
+  leave: (message) => {
+    servers[message.guild.id].voiceChannel = message.member.voice.channel;
+    if (!message.member.voice.channel) {
+      return message.channel.send('Você precisa estar em um canal de voz para usar esse comando!');
+    }
+    servers[message.guild.id].voiceChannel.leave();
+    servers[message.guild.id].connection = null;
+    servers[message.guild.id].dispatcher = null;
+    servers[message.guild.id].playing = false;
+    servers[message.guild.id].queue = [];
+    // message.channel.send('Saindo do canal de voz!');
+  },
+
   // 'teste': (message) => {
   //   message.channel.send('Mensagem de teste')
   // }
 };
 
-client.on('message', (message) => {
+client.on('message', async (message) => {
   console.log(message.content);
-  // if to verify and call commands
-  if (message.content[0] === '!' && commands[message.content.substr(1)]) {
-    // message.react('🤖'); // react every time the bot is called
-    commands[message.content.substr(1)](message);
+
+  if (message.content.startsWith(prefix)) {
+    const command = message.content.match(/(?<=.)\w+/g)[0]; // get only the command without the prefix
+    if (commands[command]) {
+      message.react('🤖'); // react every time the bot is called
+      commands[command](message);
+    }
   }
 
   // react to Jopeina Bot messages
@@ -181,4 +373,4 @@ client.on('message', (message) => {
   }
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_TOKEN);
