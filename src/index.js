@@ -22,7 +22,7 @@ const youtube = new google.youtube_v3.Youtube({
 
 const fuso = process.env.FUSO ?? 0;
 
-const onVocation = false;
+const onVocation = true;
 
 const prefix = '!';
 
