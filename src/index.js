@@ -179,6 +179,7 @@ client.once('ready', () => {
   loadServers();
 
   // schedule PUC
+  /*
   const rulePuc = new schedule.RecurrenceRule();
   rulePuc.dayOfWeek = [new schedule.Range(1, 5)]; // segunda a sexta
   rulePuc.hour = 18 - fuso;
@@ -195,8 +196,10 @@ client.once('ready', () => {
       });
     }
   });
+  */
 
   // schedule Motivacional
+  /*
   const ruleMotivacional = new schedule.RecurrenceRule();
   ruleMotivacional.dayOfWeek = [new schedule.Range(0, 6)]; // todos os dias da semana
   ruleMotivacional.hour = 9 - fuso;
@@ -212,6 +215,7 @@ client.once('ready', () => {
       client.channels.cache.get(idChannels.noPuedoMotivacional).send(msg);
     });
   });
+  */
 });
 
 // commands to bot
