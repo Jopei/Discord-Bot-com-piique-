@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import api from './api.js';
+const dotenv = require('dotenv');
+const api = require('./api.js');
 
 const TaskService = {
   getTasks: async ({ matricula, nextDays = 15 }) => {
@@ -8,4 +8,4 @@ const TaskService = {
   },
 };
 
-export default TaskService;
+module.exports = TaskService;

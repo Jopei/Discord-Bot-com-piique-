@@ -1,19 +1,19 @@
 // discord invite link: https://discord.com/oauth2/authorize?client_id=812482585162416128&scope=bot&permissions=2147483647
 
-import Discord from 'discord.js';
-import schedule from 'node-schedule';
-import dotenv from 'dotenv';
-import ytdl from 'ytdl-core';
-import google from 'googleapis';
-import fs from 'fs';
-import motivacionalApi from './motivacional/motivacionalApi.js';
-import taskService from './services/TaskService.js';
+const { Client, Intents } = require('discord.js');
+const schedule = require('node-schedule');
+const dotenv = require('dotenv');
+const ytdl = require('ytdl-core');
+const google = require('googleapis');
+const fs = require('fs');
+const motivacionalApi = require('./motivacional/motivacionalApi.js');
+const taskService = require('./services/TaskService.js');
 
 dotenv.config();
 
 
 
-const client = new Discord.Client();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 const youtube = new google.youtube_v3.Youtube({
   version: 'v3',

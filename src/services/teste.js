@@ -4,8 +4,8 @@
   author: piique
 */
 
-import translate from './translate.js';
-import MotivacionalApi from '../motivacional/motivacionalApi.js';
+const translate = require('./translate.js');
+const MotivacionalApi = require('../motivacional/motivacionalApi.js');
 
 MotivacionalApi('pt').then((resultado) => {
   const texto = resultado;

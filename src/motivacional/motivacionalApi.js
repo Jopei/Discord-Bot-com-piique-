@@ -1,5 +1,5 @@
-import translate from '../services/translate.js';
-import messages from './messages.js';
+const translate = require('../services/translate.js');
+const messages = require('./messages.js');
 
 /*
   example of use:
@@ -31,4 +31,4 @@ const MotivacionalApi = (targetLanguageIso = 'pt') => {
   });
 };
 
-export default MotivacionalApi;
+module.exports = MotivacionalApi;

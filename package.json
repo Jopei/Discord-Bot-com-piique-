@@ -2,7 +2,6 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "serve": "node ./src/index.js",
@@ -15,16 +14,16 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "discordjs/opus",
-    "axios": "^0.21.1",
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "ffmpeg-static": "^4.4.0",
-    "googleapis": "^87.0.0",
-    "node-schedule": "^2.0.0",
-    "ytdl-core": "^4.9.1"
+    "axios": "^0.24.0",
+    "discord.js": "^13.6.0",
+    "dotenv": "^14.1.0",
+    "ffmpeg-static": "^4.4.1",
+    "googleapis": "^92.0.0",
+    "node-schedule": "^2.1.0",
+    "ytdl-core": "^4.10.0"
   },
   "engines": {
-    "node": "14.*",
+    "node": "16.*",
     "npm": "*"
   },
   "devDependencies": {

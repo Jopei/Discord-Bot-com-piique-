@@ -1,4 +1,4 @@
-import taskService from '../services/TaskService.js';
+const taskService = require('../services/TaskService.js');
 
 const discordInfo = [
   { user: 'piique', id: 301116055911399435, matricula: 704421 },

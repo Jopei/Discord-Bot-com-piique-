@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 /*
   example of use:
@@ -21,8 +21,7 @@ const translate = async (config = {}) => {
   const sourceLang = config.sourceIso ?? 'auto';
   const targetLang = config.targetIso ?? 'pt';
 
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${
-    sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}`;
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}`;
 
   let translatedText = '';
 
@@ -42,4 +41,4 @@ const translate = async (config = {}) => {
   });
 };
 
-export default translate;
+module.exports = translate;

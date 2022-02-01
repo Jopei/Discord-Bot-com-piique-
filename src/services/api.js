@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 console.log(process.env.API_TOKEN);
 const api = axios.create({
@@ -11,4 +11,4 @@ const api = axios.create({
   },
 });
 
-export default api;
+module.exports = api;
