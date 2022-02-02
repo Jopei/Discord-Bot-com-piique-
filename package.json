@@ -1,19 +1,17 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "serve": "node ./src/index.js",
     "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "./node_modules/.bin/eslint --fix",
+    "eslint": "eslint --fix",
     "dev": "nodemon ./src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "discordjs/opus",
     "axios": "^0.24.0",
     "discord.js": "^13.6.0",
     "dotenv": "^14.1.0",
@@ -27,9 +25,16 @@
     "npm": "*"
   },
   "devDependencies": {
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^2.0.12"
-  }
+    "node": "^16.13.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piique/discord-bot.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/piique/discord-bot/issues"
+  },
+  "homepage": "https://github.com/piique/discord-bot#readme",
+  "description": ""
 }
