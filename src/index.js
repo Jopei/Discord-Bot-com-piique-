@@ -7,6 +7,7 @@ const google = require('googleapis');
 const fs = require('fs');
 const motivacionalApi = require('./motivacional/motivacionalApi.js');
 const taskService = require('./services/TaskService.js');
+require('dotenv').config();
 
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -354,7 +355,43 @@ const commands = {
   // }
 };
 
-client.on('message', async (message) => {
+client.on('ready', () => {
+  const guildId = '301120403776995339';
+  const guild = client.guilds.cache.get(guildId);
+
+  let commands;
+
+  // uncomment to final deploy
+  // if (guild) {
+  //   commands = guild.commands;
+  // } else {
+  //   commands = client.application?.commands;
+  // }
+  commands = guild.commands;
+
+
+  commands?.create({
+    name: 'ping',
+    description: 'Retorna o ping do bot',
+  })
+})
+
+client.on('interactionCreate', (interaction) => {
+  console.log(interaction);
+  if (!interaction.isCommand()) return;
+
+  const { commandName, option } = interaction;
+  console.log(commandName)
+  if (commandName === 'ping') {
+    interaction.reply({
+      content: 'pong',
+      ephemeral: true,
+    });
+  }
+});
+
+
+client.on('messageCreate', async (message) => {
   console.log(message.content);
 
   if (message.content.startsWith(prefix)) {
