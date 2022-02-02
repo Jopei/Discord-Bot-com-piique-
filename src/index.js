@@ -2,15 +2,11 @@
 
 const { Client, Intents } = require('discord.js');
 const schedule = require('node-schedule');
-const dotenv = require('dotenv');
 const ytdl = require('ytdl-core');
 const google = require('googleapis');
 const fs = require('fs');
 const motivacionalApi = require('./motivacional/motivacionalApi.js');
 const taskService = require('./services/TaskService.js');
-
-dotenv.config();
-
 
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -20,7 +16,7 @@ const youtube = new google.youtube_v3.Youtube({
   auth: process.env.YOUTUBE_API_KEY,
 });
 
-const fuso = process.env.FUSO ?? 0;
+const fuso = process.env.FUSO ? process.env.FUSO : 0;
 
 const onVocation = true;
 
@@ -237,7 +233,7 @@ const commands = {
 
   motivacional: (message) => {
     motivacionalApi('pt').then((resultado) => {
-      const msg = `- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author ?? 'desconhecido'}`;
+      const msg = `- ${resultado.originalText}\n- ${resultado.translatedText} \n~ ${resultado.author && 'desconhecido'}`;
       message.channel.send(msg);
     });
   },
@@ -277,6 +273,7 @@ const commands = {
 
   play: async (message) => {
     servers[message.guild.id].voiceChannel = message.member.voice.channel;
+    console.log(message.guild.id);
     if (!servers[message.guild.id].voiceChannel) {
       return message.channel.send('Você precisa estar em um canal de voz para usar esse comando!');
     }
